@@ -307,6 +307,48 @@ h1 {
   background: var(--notice-bg);
 }
 
+/* ── Layer sections ── */
+
+.layer-section {
+  margin-top: 1.75rem;
+}
+
+.layer-section:first-child {
+  margin-top: 0;
+}
+
+.layer-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.layer-pill {
+  flex: none;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: var(--tag-bg);
+  color: var(--link);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.layer-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.layer-projects {
+  display: grid;
+  gap: 1rem;
+}
+
 /* ── Navigation ── */
 
 .site-nav {

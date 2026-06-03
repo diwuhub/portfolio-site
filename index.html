@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Biopharma ML Project Portfolio</title>
+    <title>Di Wu — Biopharma ML &amp; AI Portfolio</title>
     <meta
       name="description"
-      content="A compact portfolio of runnable biopharma ML and scientific software projects with screenshots, summaries, and GitHub links."
+      content="Portfolio spanning molecular engineering, ML benchmarking, decision systems, and AI safety — with runnable repos, rigorous evaluation, and cross-domain depth."
     >
     <link rel="icon" href="./favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="./styles.css">
@@ -21,15 +21,18 @@
       </nav>
 
       <header class="page-header" id="about">
-        <p class="eyebrow">Biopharma ML Projects</p>
-        <h1>Di Wu hub Portfolio</h1>
+        <p class="eyebrow">Di Wu — Biopharma ML &amp; AI</p>
+        <h1>From Molecules to Decisions to Governance</h1>
         <p class="lede">
-          A focused set of computational biology, biologics developability, protein
-          engineering, and CMC decision-support projects. Each repository is intended
-          to be cloneable, testable, and usable from a clean local environment.
+          Selected runnable projects across four layers: molecular engineering,
+          prediction and benchmarking, decision systems, and AI safety. Each repo is
+          cloneable, testable, and designed to demonstrate end-to-end rigor —
+          from wet-lab-adjacent computation through regulatory decision support
+          to cross-domain ethics auditing.
         </p>
         <div class="header-links">
-          <a href="https://github.com/diwuhub" class="header-link" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/diwuhub" class="header-link" target="_blank" rel="noreferrer">GitHub (diwuhub)</a>
+          <a href="https://github.com/susiefirst-maker" class="header-link" target="_blank" rel="noreferrer">GitHub (susiefirst-maker)</a>
         </div>
       </header>
 
@@ -37,13 +40,14 @@
         <h2 id="methods-heading">Methods &amp; Tools</h2>
         <div class="skills-grid">
           <div class="skill-group">
-            <h3 class="skill-group-title">ML Methods</h3>
+            <h3 class="skill-group-title">ML &amp; Optimization</h3>
             <ul class="tag-list">
               <li class="tag-chip">Protein language models</li>
               <li class="tag-chip">Bayesian optimization</li>
               <li class="tag-chip">Grouped cross-validation</li>
               <li class="tag-chip">Bootstrap intervals</li>
               <li class="tag-chip">Descriptor ablation</li>
+              <li class="tag-chip">Gibbs sampling</li>
             </ul>
           </div>
           <div class="skill-group">
@@ -52,8 +56,9 @@
               <li class="tag-chip">Python</li>
               <li class="tag-chip">Streamlit</li>
               <li class="tag-chip">pytest</li>
-              <li class="tag-chip">Static HTML</li>
+              <li class="tag-chip">Static HTML/JS</li>
               <li class="tag-chip">Reproducible CLIs</li>
+              <li class="tag-chip">Knowledge graphs</li>
             </ul>
           </div>
           <div class="skill-group">
@@ -62,8 +67,9 @@
               <li class="tag-chip">Antibody developability</li>
               <li class="tag-chip">Protein engineering</li>
               <li class="tag-chip">Glycoproteomics</li>
-              <li class="tag-chip">CMC analytics</li>
+              <li class="tag-chip">CMC &amp; regulatory</li>
               <li class="tag-chip">Decision support</li>
+              <li class="tag-chip">AI safety &amp; ethics</li>
             </ul>
           </div>
         </div>
@@ -85,7 +91,7 @@
     </main>
 
     <footer class="site-footer">
-      <p>&copy; 2026 Biopharma ML project portfolio. Built as a static site.</p>
+      <p>&copy; 2026 Di Wu. Built as a static site.</p>
     </footer>
 
     <script>
@@ -94,12 +100,8 @@
 
       function createElement(tagName, className, text) {
         const node = document.createElement(tagName);
-        if (className) {
-          node.className = className;
-        }
-        if (text !== undefined) {
-          node.textContent = text;
-        }
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
         return node;
       }
 
@@ -137,7 +139,7 @@
           card.appendChild(frame);
         } else if (gallery.length > 1) {
           const grid = createElement("div", "project-screenshot-grid");
-          gallery.forEach((item) => {
+          gallery.forEach(function(item) {
             const frame = createElement("figure", "project-screenshot-frame");
             const image = createElement("img", "project-screenshot");
             image.src = item.src;
@@ -153,9 +155,8 @@
         }
 
         const tags = createElement("ul", "tag-list");
-        project.tags.forEach((tag) => {
-          const item = createElement("li", "tag-chip", tag);
-          tags.appendChild(item);
+        project.tags.forEach(function(tag) {
+          tags.appendChild(createElement("li", "tag-chip", tag));
         });
         card.appendChild(tags);
 
@@ -175,39 +176,57 @@
         }
         card.appendChild(links);
 
-        const factsHeading = createElement("p", "facts-heading", "Basic run context");
+        const factsHeading = createElement("p", "facts-heading", "Quick start");
         card.appendChild(factsHeading);
 
         const facts = createElement("ul", "facts-list");
-        project.key_facts.forEach((fact) => {
-          const item = createElement("li", "", fact);
-          facts.appendChild(item);
+        project.key_facts.forEach(function(fact) {
+          facts.appendChild(createElement("li", "", fact));
         });
         card.appendChild(facts);
 
         return card;
       }
 
+      function renderLayer(layer) {
+        const section = createElement("div", "layer-section");
+
+        const heading = createElement("div", "layer-heading");
+        const pill = createElement("span", "layer-pill", layer.layer);
+        heading.appendChild(pill);
+        if (layer.layer_desc) {
+          heading.appendChild(createElement("p", "layer-desc", layer.layer_desc));
+        }
+        section.appendChild(heading);
+
+        const grid = createElement("div", "layer-projects");
+        layer.projects.forEach(function(project) {
+          grid.appendChild(renderProject(project));
+        });
+        section.appendChild(grid);
+
+        return section;
+      }
+
       async function loadProjects() {
         try {
           const response = await fetch("./projects.json", { cache: "no-store" });
-          if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-          }
+          if (!response.ok) throw new Error("HTTP " + response.status);
 
-          const projects = await response.json();
+          const layers = await response.json();
           const fragment = document.createDocumentFragment();
+          var totalProjects = 0;
 
-          projects.forEach((project) => {
-            fragment.appendChild(renderProject(project));
+          layers.forEach(function(layer) {
+            fragment.appendChild(renderLayer(layer));
+            totalProjects += layer.projects.length;
           });
 
           projectsRoot.replaceChildren(fragment);
-          loadStatus.textContent = projects.length + " public project summaries.";
+          loadStatus.textContent = totalProjects + " projects across " + layers.length + " layers.";
         } catch (error) {
-          const notice = createElement(
-            "p",
-            "notice",
+          var notice = createElement(
+            "p", "notice",
             "Could not load projects.json. Serve this directory with python3 -m http.server 8000 and open http://127.0.0.1:8000/."
           );
           projectsRoot.replaceChildren(notice);
